@@ -1,0 +1,9 @@
+name: wazo-ctid-conference
+namespace: sboily
+version: 0.0.1
+author: Sylvain Boily
+display_name: CTI Conference
+tags:
+  - experimental
+  - conference
+homepage: https://github.com/sboily/wazo-ctid-conference
