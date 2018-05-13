@@ -89,6 +89,5 @@ class ConferenceParticipantsKickResource(AuthResource):
     @required_acl('ctid-ng.conferences.{conference_id}.participants.kick.update')
     def put(self, conference_id, channel):
         conference = self._conferences_service.kick(conference_id, urllib.unquote(channel))
-        print(conference)
 
         return '', 204
