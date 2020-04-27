@@ -27,6 +27,23 @@ paths:
             $ref: '#/definitions/Conference'
         '503':
           $ref: '#/responses/AnotherServiceUnavailable'
+  /conferences/verify/{conference_id}:
+    get:
+      summary: Check if conference ID exist
+      description: '**NO Required ACL** be careful'
+      parameters:
+        - $ref: '#/parameters/ConferenceID'
+      tags:
+      - conferences
+      responses:
+        '200':
+          description: Conference exist
+          schema:
+            $ref: '#/definitions/Conference'
+        '404':
+          description: Conference doesn't exist
+        '503':
+          $ref: '#/responses/AnotherServiceUnavailable'
 definitions:
   Conference:
     type: object
