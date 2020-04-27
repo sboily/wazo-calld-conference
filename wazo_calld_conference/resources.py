@@ -21,7 +21,7 @@ class ConferencesResource(AuthResource):
         conferences = self._conferences_service.list_conferences()
 
         return {
-            'items': conference_schema.dump(conferences, many=True).data
+            'items': conference_schema.dump(conferences, many=True)
         }, 200
 
 
@@ -34,4 +34,4 @@ class ConferenceResource(AuthResource):
     def get(self, conference_id):
         conference = self._conferences_service.get_conference(conference_id)
 
-        return conference_schema.dump(conference).data
+        return conference_schema.dump(conference)
