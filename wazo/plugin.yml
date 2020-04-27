@@ -1,9 +1,9 @@
-name: wazo-ctid-conference
+name: wazo-calld-conference
 namespace: sboily
-version: 0.0.1
+version: 0.0.2
 author: Sylvain Boily
-display_name: CTI Conference
+display_name: Calld extend API Conference
 tags:
   - experimental
   - conference
-homepage: https://github.com/sboily/wazo-ctid-conference
+homepage: https://github.com/sboily/wazo-calld-conference

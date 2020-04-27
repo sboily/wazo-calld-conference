@@ -1,0 +1,60 @@
+paths:
+  /conferences:
+    get:
+      summary: Get conferences
+      description: '**Required ACL:** `calld.conferences.read`'
+      tags:
+      - conferences
+      responses:
+        '200':
+          description: The list of conferences
+          schema:
+            $ref: '#/definitions/ConferenceList'
+        '503':
+          $ref: '#/responses/AnotherServiceUnavailable'
+  /conferences/{conference_id}:
+    get:
+      summary: Get conference detail
+      description: '**Required ACL:** `calld.conferences.{conference_id}.read`'
+      parameters:
+        - $ref: '#/parameters/ConferenceID'
+      tags:
+      - conferences
+      responses:
+        '200':
+          description: The detail of a conference
+          schema:
+            $ref: '#/definitions/Conference'
+        '503':
+          $ref: '#/responses/AnotherServiceUnavailable'
+definitions:
+  Conference:
+    type: object
+    properties:
+      id:
+        description: Unique identifier of the conference
+        type: string
+      locked:
+        description: Is conference is locked
+        type: string
+      marked:
+        description: Is conference is marked
+        type: string
+      muted:
+        description: Is conference is muted
+        type: string
+      parties:
+        description: Number of participants
+        type: string
+  ConferenceList:
+    type: object
+    properties:
+      items:
+        $ref: '#/definitions/Conference'
+parameters:
+  ConferenceID:
+    name: conference_id
+    in: path
+    description: ID of the conference
+    required: true
+    type: string

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2017-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from marshmallow import (
@@ -8,7 +8,7 @@ from marshmallow import (
 )
 from marshmallow.validate import Length
 
-from xivo_ctid_ng.helpers.mallow import StrictDict
+from wazo_calld_conference.helpers.mallow import StrictDict
 
 
 class ConferenceSchema(Schema):

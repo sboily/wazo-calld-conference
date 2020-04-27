@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright 2018 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
-
-import logging
 
 
 class ConferenceService(object):
@@ -34,22 +32,6 @@ class ConferenceService(object):
                 p.append(self._participant(member))
 
         return p
-
-
-    def mute(self, conference_id, channel):
-        return self.amid.action('ConfbridgeMute', {'Conference': conference_id, 'Channel': channel})
-
-    def unmute(self, conference_id, channel):
-        return self.amid.action('ConfbridgeUnmute', {'Conference': conference_id, 'Channel': channel})
-
-    def kick(self, conference_id, channel):
-        return self.amid.action('ConfBridgeKick', {'Conference': conference_id, 'Channel': channel})
-
-    def start_record(self, conference_id, record_file):
-        return self.amid.action('ConfBridgeStartRecord', {'Conference': conference_id, 'RecordFile': record_file})
-
-    def stop_record(self, conference_id):
-        return self.amid.action('ConfBridgeStopRecord', {'Conference': conference_id})
 
     def _conference(self, conf):
         if conf.get('Conference'):

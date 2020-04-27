@@ -6,9 +6,9 @@ from setuptools import find_packages
 
 
 setup(
-    name='wazo-ctid-conference',
-    version='0.0.1',
-    description='Wazo CTI conference',
+    name='wazo-calld-conference',
+    version='0.0.2',
+    description='Wazo extend API conference for calld',
     author='Sylvain Boily',
     author_email='sylvain@wazo.io',
     url='http://www.wazo.io/',
@@ -16,11 +16,11 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        'wazo_ctid_conference': ['api.yml'],
+        'wazo_calld_conference': ['api.yml'],
     },
     entry_points={
-        'xivo_ctid_ng.plugins': [
-            'conference = wazo_ctid_conference.plugin:Plugin'
+        'wazo_calld.plugins': [
+            'conference_ext = wazo_calld_conference.plugin:Plugin'
         ],
     },
 )
