@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 
 from wazo_calld.auth import required_acl
-from wazo_calld.http import AuthResource
+from wazo_calld.http import AuthResource, ErrorCatchingResource
 
 from .schema import (
     conference_schema,
@@ -35,3 +35,16 @@ class ConferenceResource(AuthResource):
         conference = self._conferences_service.get_conference(conference_id)
 
         return conference_schema.dump(conference)
+
+class ConferenceResourceVerify(ErrorCatchingResource):
+
+    def __init__(self, conferences_service):
+        self._conferences_service = conferences_service
+
+    def get(self, conference_id):
+        conference = self._conferences_service.check_conference(conference_id)
+
+        if not conference:
+            return 404
+
+        return 200

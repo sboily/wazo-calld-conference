@@ -23,6 +23,12 @@ class ConferenceService(object):
             conf['participants'] = self.get_participants(conference_id)
         return conf
 
+    def check_conference(self, conference_id):
+        conf = self._find_conference(self.amid.action('confbridgelistrooms'), conference_id)
+        if conf:
+            return True
+        return False
+
     def get_participants(self, conference_id):
         members = self.amid.action('confbridgelist', {'conference': conference_id})
         p = []
