@@ -8,7 +8,7 @@ from marshmallow import (
 )
 from marshmallow.validate import Length
 
-from wazo_calld_conference.helpers.mallow import StrictDict
+from wazo_calld.plugin_helpers.mallow import StrictDict
 
 
 class ConferenceSchema(Schema):
