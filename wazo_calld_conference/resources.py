@@ -45,6 +45,6 @@ class ConferenceResourceVerify(ErrorCatchingResource):
         conference = self._conferences_service.check_conference(conference_id)
 
         if not conference:
-            return 404
+            return '', 404
 
-        return 200
+        return '', 200
