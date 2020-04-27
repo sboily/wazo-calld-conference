@@ -12,7 +12,7 @@ from wazo_calld.plugin_helpers.mallow import StrictDict
 
 
 class ConferenceSchema(Schema):
-    conference_id = fields.Integer(validate=Length(min=1), required=True)
+    conference_id = fields.Str(validate=Length(min=1), required=True)
     locked = fields.Str(validate=Length(min=1))
     muted = fields.Str(validate=Length(min=1))
     marked = fields.Str(validate=Length(min=1))
