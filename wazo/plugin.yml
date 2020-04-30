@@ -4,6 +4,6 @@ version: 0.0.2
 author: Sylvain Boily
 display_name: Calld extend API Conference
 tags:
-  - experimental
+  - beta
   - conference
 homepage: https://github.com/sboily/wazo-calld-conference
