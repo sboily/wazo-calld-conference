@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 from wazo_calld.auth import required_acl
@@ -7,7 +7,8 @@ from wazo_calld.http import AuthResource, ErrorCatchingResource
 
 from .schema import (
     conference_schema,
-    conference_participants_schema
+    conference_participants_schema,
+    conference_adhoc_schema,
 )
 
 
@@ -48,3 +49,15 @@ class ConferenceResourceVerify(ErrorCatchingResource):
             return '', 404
 
         return '', 200
+
+
+class ConferenceAdhocResource(AuthResource):
+
+    def __init__(self, conferences_service):
+        self._conferences_service = conferences_service
+
+    @required_acl('calld.conferences.adhoc.create')
+    def post(self):
+        conference_adhoc = self._conferences_service.create_conference_adhoc()
+
+        return conference_adhoc_schema.dump(conference_adhoc), 201

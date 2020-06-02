@@ -44,6 +44,19 @@ paths:
           description: Conference doesn't exist
         '503':
           $ref: '#/responses/AnotherServiceUnavailable'
+  /conferences/adhoc:
+    post:
+      summary: Create an adhoc conferences
+      description: '**Required ACL:** `calld.conferences.adhoc.create`'
+      tags:
+      - conferences
+      responses:
+        '201':
+          description: Conference Adhoc has been created
+          schema:
+            $ref: '#/definitions/ConferenceAdhoc'
+        '503':
+          $ref: '#/responses/AnotherServiceUnavailable'
 definitions:
   Conference:
     type: object
@@ -68,6 +81,15 @@ definitions:
     properties:
       items:
         $ref: '#/definitions/Conference'
+  ConferenceAdhoc:
+    type: object
+    properties:
+      id:
+        description: Unique identifier of the conference
+        type: string
+      calls:
+        description: List of calls in this conference
+        type: array
 parameters:
   ConferenceID:
     name: conference_id
