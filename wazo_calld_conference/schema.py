@@ -41,7 +41,7 @@ class ConferenceParticipantsSchema(Schema):
 
 class ConferenceAdhocSchema(Schema):
     conference_adhoc_id = fields.Str(validate=Length(min=1), required=True)
-    calls = fields.List(missing=list)
+    calls = fields.List(fields.String, missing=list)
 
 
 conference_schema = ConferenceSchema()
