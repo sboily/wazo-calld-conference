@@ -48,6 +48,8 @@ paths:
     post:
       summary: Create an adhoc conferences
       description: '**Required ACL:** `calld.conferences.adhoc.create`'
+      parameters:
+        - $ref: '#/parameters/ConferenceAdhoc'
       tags:
       - conferences
       responses:
@@ -97,3 +99,8 @@ parameters:
     description: ID of the conference
     required: true
     type: string
+  ConferenceAdhoc:
+    name: body
+    in: body
+    description: Parameters of the relocate
+    required: true
