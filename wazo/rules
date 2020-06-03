@@ -17,6 +17,7 @@ case "$1" in
         ;;
 
     uninstall)
+        rm /etc/asterisk/extensions_extra.d/conference_adhoc.conf
         systemctl restart wazo-calld
         ;;
 
