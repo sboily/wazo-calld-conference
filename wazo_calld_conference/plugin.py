@@ -18,6 +18,7 @@ class Plugin(object):
 
     def load(self, dependencies):
         api = dependencies['api']
+        ari = dependencies['ari']
         config = dependencies['config']
         token_changed_subscribe = dependencies['token_changed_subscribe']
         bus_consumer = dependencies['bus_consumer']
@@ -27,7 +28,7 @@ class Plugin(object):
 
         token_changed_subscribe(amid_client.set_token)
 
-        conferences_service = ConferenceService(amid_client)
+        conferences_service = ConferenceService(amid_client, ari.client)
 
         conferences_bus_event_handler = ConferencesBusEventHandler(bus_publisher)
         conferences_bus_event_handler.subscribe(bus_consumer)

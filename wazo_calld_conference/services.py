@@ -2,11 +2,17 @@
 # Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+import uuid
+
+from wazo_calld.plugin_helpers import ami
+from wazo_calld.plugin_helpers.exceptions import WazoAmidError
+
 
 class ConferenceService(object):
 
-    def __init__(self, amid):
+    def __init__(self, amid, ari):
         self.amid = amid
+        self.ari = ari
 
     def list_conferences(self):
         confs = self.amid.action('confbridgelistrooms')
@@ -40,8 +46,18 @@ class ConferenceService(object):
         return p
 
     def create_conference_adhoc(self, calls):
-        print(calls)
-        return '1234'
+        conference_room = uuid.uuid4()
+        for call in calls:
+            try:
+                channel = self.ari.channels.get(channelId=call)
+                ami.redirect(self.amid,
+                             channel.name,
+                             context='conference_adhoc',
+                             exten=conference_room)
+            except WazoAmidError as e:
+                logger.exception('wazo-amid error: %s', e.__dict__)
+
+        return conference_room
 
     def _conference(self, conf):
         if conf.get('Conference'):
