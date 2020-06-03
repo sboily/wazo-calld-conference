@@ -50,6 +50,7 @@ class ConferenceService(object):
         for call in calls:
             try:
                 channel = self.ari.channels.get(channelId=call)
+                print(dir(channel))
                 ami.redirect(self.amid,
                              channel.name,
                              context='conference_adhoc',
