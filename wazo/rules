@@ -18,6 +18,7 @@ case "$1" in
 
     uninstall)
         rm /etc/asterisk/extensions_extra.d/conference_adhoc.conf
+	/usr/sbin/asterisk -rx 'dialplan reload'
         systemctl restart wazo-calld
         ;;
 
