@@ -51,7 +51,7 @@ class ConferenceResourceVerify(ErrorCatchingResource):
         return '', 200
 
 
-class ConferenceAdhocResource(AuthResource):
+class ConferencesAdhocResource(AuthResource):
 
     def __init__(self, conferences_service):
         self._conferences_service = conferences_service
