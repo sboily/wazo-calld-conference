@@ -39,8 +39,9 @@ class ConferenceService(object):
 
         return p
 
-    def create_conference_adhoc(self):
-        return True
+    def create_conference_adhoc(self, call_ids):
+        print(call_ids)
+        return '1234'
 
     def _conference(self, conf):
         if conf.get('Conference'):

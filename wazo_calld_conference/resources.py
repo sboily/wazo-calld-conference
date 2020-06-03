@@ -2,6 +2,8 @@
 # Copyright 2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+from flask import request
+
 from wazo_calld.auth import required_acl
 from wazo_calld.http import AuthResource, ErrorCatchingResource
 
@@ -58,6 +60,7 @@ class ConferencesAdhocResource(AuthResource):
 
     @required_acl('calld.conferences.adhoc.create')
     def post(self):
-        conference_adhoc = self._conferences_service.create_conference_adhoc()
+        form = conference_adhoc_schema.load(request.get_json())
+        conference_adhoc = self._conferences_service.create_conference_adhoc(**form)
 
         return conference_adhoc_schema.dump(conference_adhoc), 201
