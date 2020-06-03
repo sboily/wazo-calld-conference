@@ -97,6 +97,10 @@ definitions:
       calls:
         description: List of calls in this conference
         type: array
+        calls:
+          call_id:
+            description: call_id of participants
+            type: string
 parameters:
   ConferenceID:
     name: conference_id
