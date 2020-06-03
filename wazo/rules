@@ -13,6 +13,7 @@ case "$1" in
         ;;
 
     install)
+	/usr/sbin/asterisk -rx 'dialplan reload'
         systemctl restart wazo-calld
         ;;
 

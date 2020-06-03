@@ -2,6 +2,8 @@
 # Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+import random
+
 from wazo_calld.plugin_helpers import ami
 from wazo_calld.plugin_helpers.exceptions import WazoAmidError
 
