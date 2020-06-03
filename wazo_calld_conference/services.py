@@ -2,8 +2,6 @@
 # Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
-import uuid
-
 from wazo_calld.plugin_helpers import ami
 from wazo_calld.plugin_helpers.exceptions import WazoAmidError
 
@@ -45,16 +43,18 @@ class ConferenceService(object):
 
         return p
 
-    def create_conference_adhoc(self, calls):
-        conference_room = uuid.uuid4()
+    def create_conference_adhoc(self, initiator, calls):
+        conference_room = ''.join(str(random.randint(0,9)) for _ in iter(range(12)))
+        channel_initiator = self.ari.channels.get(channelId=initiator)
         for call in calls:
             try:
                 channel = self.ari.channels.get(channelId=call)
-                print(dir(channel))
                 ami.redirect(self.amid,
-                             channel.name,
+                             channel.json['name'],
                              context='conference_adhoc',
-                             exten=conference_room)
+                             exten=str(conference_room),
+                             extra_channel=channel_initiator.json['name'])
+                channel_initiator = None
             except WazoAmidError as e:
                 logger.exception('wazo-amid error: %s', e.__dict__)
 
