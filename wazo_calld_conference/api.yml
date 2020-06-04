@@ -97,7 +97,7 @@ paths:
           description: Conference adhoc has been deleted
         '503':
           $ref: '#/responses/AnotherServiceUnavailable'
-  /conferences/adhoc/{conference_id}/{call_id}:
+  /conferences/adhoc/{conference_id}/calls/{call_id}:
     delete:
       summary: Remove a participant of an adhoc conference
       description: '**Required ACL:** `calld.conferences.adhoc.{conference_id}.{call_id}.delete`'
