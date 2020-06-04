@@ -48,22 +48,38 @@ class ConferenceService(object):
 
         return p
 
-    def create_conference_adhoc(self, initiator, calls):
-        conference_room = ''.join(str(random.randint(0,9)) for _ in iter(range(12)))
-        channel_initiator = self.ari.channels.get(channelId=initiator)
+    def create_conference_adhoc(self, calls):
+        conference_id = uuid.uuid4()
         for call in calls:
             try:
-                channel = self.ari.channels.get(channelId=call)
+                channel_initiator = self.ari.channels.get(channelId=call['initiator_call_id'])
+                channel = self.ari.channels.get(channelId=call['call_id'])
                 ami.redirect(self.amid,
                              channel.json['name'],
                              context='conference_adhoc',
-                             exten=str(conference_room),
+                             exten=str(conference_id),
                              extra_channel=channel_initiator.json['name'])
                 channel_initiator = None
             except WazoAmidError as e:
                 logger.exception('wazo-amid error: %s', e.__dict__)
 
-        return conference_room
+        return conference_id
+
+    def update_conference_adhoc(self, conference_id, calls):
+        for call in calls:
+            try:
+                channel_initiator = self.ari.channels.get(channelId=call['initiator_call_id'])
+                channel = self.ari.channels.get(channelId=call['call_id'])
+                ami.redirect(self.amid,
+                             channel.json['name'],
+                             context='conference_adhoc',
+                             exten=str(conference_id),
+                             extra_channel=channel_initiator.json['name'])
+                channel_initiator = None
+            except WazoAmidError as e:
+                logger.exception('wazo-amid error: %s', e.__dict__)
+
+        return conference_id
 
     def join_bridge(self, channel_id, future_bridge_uuid):
         logger.info('%s is joining bridge %s', channel_id, future_bridge_uuid)
