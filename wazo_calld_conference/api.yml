@@ -69,7 +69,7 @@ paths:
       summary: Update an adhoc conference
       description: '**Required ACL:** `calld.conferences.adhoc.{conference_id}.update`'
       parameters:
-        - $ref: '#/parameters/ConferenceID'
+      - $ref: '#/parameters/ConferenceID'
       - name: body
         in: body
         description: Parameters of the conference calls
