@@ -91,15 +91,17 @@ definitions:
   ConferenceAdhoc:
     type: object
     properties:
-      initiator:
-        description: Call ID of the initiator of the conference
-        type: string
       calls:
         description: List of calls in this conference
         type: array
         items:
-          description: Call ID from channel participants
-          type: string
+          properties:
+            initiator_call_id:
+              description: Call ID of the initiator of the conference
+              type: string
+            call_id:
+              description: Call ID from channel participant
+              type: string
 parameters:
   ConferenceID:
     name: conference_id

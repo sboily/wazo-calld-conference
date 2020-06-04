@@ -2,6 +2,7 @@
 # Copyright 2017-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
+from xivo.pubsub import CallbackCollector
 from wazo_amid_client import Client as AmidClient
 
 from .resources import (
@@ -11,6 +12,7 @@ from .resources import (
     ConferencesAdhocResource,
     )
 from .services import ConferenceService
+from .stasis import ConferenceAdhocStasis
 from .bus_consume import ConferencesBusEventHandler
 
 
@@ -32,6 +34,12 @@ class Plugin(object):
 
         conferences_bus_event_handler = ConferencesBusEventHandler(bus_publisher)
         conferences_bus_event_handler.subscribe(bus_consumer)
+
+        stasis = ConferenceAdhocStasis(ari, conferences_service)
+
+        startup_callback_collector = CallbackCollector()
+        ari.client_initialized_subscribe(startup_callback_collector.new_source())
+        startup_callback_collector.subscribe(stasis.initialize)
 
         api.add_resource(ConferencesResource, '/conferences', resource_class_args=[conferences_service])
         api.add_resource(ConferenceResource, '/conferences/<conference_id>', resource_class_args=[conferences_service])

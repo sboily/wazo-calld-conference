@@ -2,11 +2,14 @@
 # Copyright 2018-2020 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
-import random
+import uuid
+import logging
 
 from wazo_calld.plugin_helpers import ami
 from wazo_calld.plugin_helpers.exceptions import WazoAmidError
 
+
+logger = logging.getLogger(__name__)
 
 class ConferenceService(object):
 
@@ -61,6 +64,28 @@ class ConferenceService(object):
                 logger.exception('wazo-amid error: %s', e.__dict__)
 
         return conference_room
+
+    def join_bridge(self, channel_id, future_bridge_uuid):
+        logger.info('%s is joining bridge %s', channel_id, future_bridge_uuid)
+
+        try:
+            self.ari.channels.answer(channelId=channel_id)
+        except ARINotFound:
+            logger.info('the answered (%s) left the call before being bridged')
+            return
+
+        bridges = [candidate for candidate in self.ari.bridges.list() if
+                   candidate.json['id'] == future_bridge_uuid]
+        if bridges:
+            bridge = bridges[0]
+            logger.info('Using bridge %s', bridge.id)
+        else:
+            bridge = self.ari.bridges.createWithId(
+                type='mixing',
+                bridgeId=future_bridge_uuid,
+            )
+
+        bridge.addChannel(channel=channel_id)
 
     def _conference(self, conf):
         if conf.get('Conference'):
