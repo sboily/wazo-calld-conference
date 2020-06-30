@@ -6,6 +6,8 @@ import uuid
 import logging
 import requests
 
+from ari.exceptions import ARINotFound
+
 from wazo_calld.plugin_helpers import ami
 from wazo_calld.plugin_helpers.exceptions import WazoAmidError
 
