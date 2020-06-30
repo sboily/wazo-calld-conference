@@ -25,6 +25,7 @@ class UserParticipantLeftConferenceAdhocEvent:
 
     def __init__(self, conference_id, call_id, user_uuid):
         self._body = {
+            'user_uuid': user_uuid,
             'conference_id': conference_id,
             'call_id': call_id
         }
