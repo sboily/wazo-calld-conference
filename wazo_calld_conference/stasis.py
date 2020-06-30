@@ -36,8 +36,7 @@ class ConferenceAdhocStasis:
 
     def _subscribe(self):
         self._ari.on_channel_event('StasisStart', self.stasis_start)
-        self.ari.on_channel_event('ChannelDestroyed', self.on_hangup)
-        self.ari.on_channel_event('StasisEnd', self.on_hangup)
+        self._ari.on_channel_event('ChannelDestroyed', self.on_hangup)
 
     def initialize(self):
         self._subscribe()
