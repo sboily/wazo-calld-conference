@@ -50,5 +50,4 @@ class ConferenceAdhocStasis:
         conference_id = event['bridge']['id']
         call_id = event['channel']['id']
         user_uuid = self._ari.bridges.getBridgeVar(bridgeId=conference_id, variable='CONF_ADHOC_OWNER').get('CONF_ADHOC_OWNER')
-        logger.debug('ADHOC: %s', user_uuid)
         self._notifier.participant_left(conference_id, call_id, user_uuid)
