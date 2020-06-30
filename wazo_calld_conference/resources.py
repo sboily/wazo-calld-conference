@@ -7,6 +7,8 @@ from flask import request
 from wazo_calld.auth import required_acl
 from wazo_calld.http import AuthResource, ErrorCatchingResource
 
+from xivo.tenant_flask_helpers import token
+
 from .schema import (
     conference_schema,
     conference_participants_schema,
@@ -91,5 +93,6 @@ class ConferenceParticipantAdhocResource(AuthResource):
 
     @required_acl('calld.users.me.conferences.adhoc.{conference_id}.{call_id}.delete')
     def delete(self, conference_id, call_id):
-        self._conferences_service.remove_participant_conference_adhoc(conference_id, call_id)
+        user_uuid = token.user_uuid
+        self._conferences_service.remove_participant_conference_adhoc(conference_id, call_id, user_uuid)
         return '', 204

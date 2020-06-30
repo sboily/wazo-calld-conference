@@ -16,6 +16,7 @@ from .resources import (
 from .services import ConferenceService
 from .stasis import ConferenceAdhocStasis
 from .bus_consume import ConferencesBusEventHandler
+from .notifier import ConferenceAdhocNotifier
 
 
 class Plugin(object):
@@ -32,7 +33,9 @@ class Plugin(object):
 
         token_changed_subscribe(amid_client.set_token)
 
-        conferences_service = ConferenceService(amid_client, ari.client)
+        notifier = ConferenceAdhocNotifier(bus_publisher)
+
+        conferences_service = ConferenceService(amid_client, ari.client, notifier)
 
         conferences_bus_event_handler = ConferencesBusEventHandler(bus_publisher)
         conferences_bus_event_handler.subscribe(bus_consumer)
@@ -46,6 +49,6 @@ class Plugin(object):
         api.add_resource(ConferencesResource, '/conferences', resource_class_args=[conferences_service])
         api.add_resource(ConferenceResource, '/conferences/<conference_id>', resource_class_args=[conferences_service])
         api.add_resource(ConferenceResourceVerify, '/conferences/verify/<conference_id>', resource_class_args=[conferences_service])
-        api.add_resource(ConferencesAdhocResource, '/conferences/adhoc', resource_class_args=[conferences_service])
-        api.add_resource(ConferenceAdhocResource, '/conferences/adhoc/<conference_id>', resource_class_args=[conferences_service])
-        api.add_resource(ConferenceParticipantAdhocResource, '/conferences/adhoc/<conference_id>/calls/<call_id>', resource_class_args=[conferences_service])
+        api.add_resource(ConferencesAdhocResource, '/users/me/conferences/adhoc', resource_class_args=[conferences_service])
+        api.add_resource(ConferenceAdhocResource, '/users/me/conferences/adhoc/<conference_id>', resource_class_args=[conferences_service])
+        api.add_resource(ConferenceParticipantAdhocResource, '/users/me/conferences/adhoc/<conference_id>/calls/<call_id>', resource_class_args=[conferences_service])

@@ -45,4 +45,3 @@ class ConferenceAdhocStasis:
     def on_hangup(self, channel, event):
         logger.debug('ADHOC: on_hangup: %(id)s (%(name)s)', event['channel'])
         logger.debug('ADHOC: ignoring StasisEnd event: channel %s, app %s', event['channel']['name'], event['application'])
-

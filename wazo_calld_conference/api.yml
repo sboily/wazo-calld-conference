@@ -44,7 +44,7 @@ paths:
           description: Conference doesn't exist
         '503':
           $ref: '#/responses/AnotherServiceUnavailable'
-  /conferences/adhoc:
+  /users/me/conferences/adhoc:
     post:
       summary: Create an adhoc conference
       description: '**Required ACL:** `calld.conferences.adhoc.create`'
@@ -64,7 +64,7 @@ paths:
             $ref: '#/definitions/ConferenceAdhoc'
         '503':
           $ref: '#/responses/AnotherServiceUnavailable'
-  /conferences/adhoc/{conference_id}:
+  /users/me/conferences/adhoc/{conference_id}:
     put:
       summary: Update an adhoc conference
       description: '**Required ACL:** `calld.conferences.adhoc.{conference_id}.update`'
@@ -97,7 +97,7 @@ paths:
           description: Conference adhoc has been deleted
         '503':
           $ref: '#/responses/AnotherServiceUnavailable'
-  /conferences/adhoc/{conference_id}/calls/{call_id}:
+  /users/me/conferences/adhoc/{conference_id}/calls/{call_id}:
     delete:
       summary: Remove a participant of an adhoc conference
       description: '**Required ACL:** `calld.conferences.adhoc.{conference_id}.{call_id}.delete`'

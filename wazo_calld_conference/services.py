@@ -37,9 +37,10 @@ def ami_redirect_extra(amid, channel, context, exten, priority=1, extra_channel=
 
 class ConferenceService(object):
 
-    def __init__(self, amid, ari):
+    def __init__(self, amid, ari, notifier):
         self.amid = amid
         self.ari = ari
+        self.notifier = notifier
 
     def list_conferences(self):
         confs = self.amid.action('confbridgelistrooms')
@@ -147,9 +148,10 @@ class ConferenceService(object):
 
         bridge.addChannel(channel=channel_id)
 
-    def remove_participant_conference_adhoc(self, conference_id, call_id):
+    def remove_participant_conference_adhoc(self, conference_id, call_id, user_uuid):
         try:
             self.ari.channels.hangup(channelId=call_id)
+            self.notifier.participant_left(conference_id, call_id, user_uuid)
         except ARINotFound:
             logger.info('Participant in conference adhoc does not exist')
 
