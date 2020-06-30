@@ -73,12 +73,13 @@ class ConferenceService(object):
 
         return p
 
-    def create_conference_adhoc(self, calls):
+    def create_conference_adhoc(self, calls, user_uuid):
         conference_id = uuid.uuid4()
         conference_owner = None
         for call in calls:
             try:
                 channel_initiator = self.ari.channels.get(channelId=call['initiator_call_id'])
+                self.ari.channels.setChannelVar(channelId=call['initiator_call_id'], variable='CONF_ADHOC_OWNER', value=user_uuid, bypassStasis=True)
                 channel = self.ari.channels.get(channelId=call['call_id'])
                 if not conference_owner:
                     conference_owner = call['initiator_call_id']
@@ -146,6 +147,8 @@ class ConferenceService(object):
                 bridgeId=future_bridge_uuid,
             )
 
+        user_uuid = self.ari.channels.getChannelVar(variable='CONF_ADHOC_OWNER').get('value')
+        bridge.setBridgeVar(variable='CONF_ADHOC_OWNER', value=user_uuid)
         bridge.addChannel(channel=channel_id)
 
     def remove_participant_conference_adhoc(self, conference_id, call_id, user_uuid):

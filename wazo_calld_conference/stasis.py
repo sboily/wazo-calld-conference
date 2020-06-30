@@ -10,10 +10,11 @@ class ConferenceAdhocStasis:
 
     _app_name = 'adhoc'
 
-    def __init__(self, ari, service):
+    def __init__(self, ari, service, notifier):
         self._core_ari = ari
         self._ari = ari.client
         self._service = service
+        self._notifier = notifier
 
     def stasis_start(self, event_object, event):
         if event['application'] != self._app_name:
@@ -36,12 +37,17 @@ class ConferenceAdhocStasis:
 
     def _subscribe(self):
         self._ari.on_channel_event('StasisStart', self.stasis_start)
-        self._ari.on_channel_event('StasisEnd', self.on_hangup)
+        self._ari.on_channel_event('ChannelLeftBridge', self.on_hangup)
 
     def initialize(self):
         self._subscribe()
         self._add_ari_application()
 
     def on_hangup(self, channel, event):
+        logger.debug('ADHOC: on_hangup: %s', event)
         logger.debug('ADHOC: on_hangup: %(id)s (%(name)s)', event['channel'])
         logger.debug('ADHOC: ignoring StasisEnd event: channel %s, app %s', event['channel']['name'], event['application'])
+        conference_id = event['bridge']['id']
+        call_id = event['channel']['id']
+        user_uuid = '1234'
+        self._notifier.participant_left(conference_id, call_id, user_uuid)

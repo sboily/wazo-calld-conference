@@ -40,7 +40,7 @@ class Plugin(object):
         conferences_bus_event_handler = ConferencesBusEventHandler(bus_publisher)
         conferences_bus_event_handler.subscribe(bus_consumer)
 
-        stasis = ConferenceAdhocStasis(ari, conferences_service)
+        stasis = ConferenceAdhocStasis(ari, conferences_service, notifier)
 
         startup_callback_collector = CallbackCollector()
         ari.client_initialized_subscribe(startup_callback_collector.new_source())
