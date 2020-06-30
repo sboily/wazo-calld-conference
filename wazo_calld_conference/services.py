@@ -118,6 +118,10 @@ class ConferenceService(object):
 
     def delete_conference_adhoc(self, conference_id):
         bridge = self.ari.bridges.get(bridgeId=conference_id)
+        channel_ids = set(bridge.json['channels'] for bridge in bridge.json['channels'] if self.id in bridge.json['channels'])
+        try:
+            channel_ids.remove(self.id)
+        
         if bridge:
             bridge.destroy()
         return '', 204
@@ -146,7 +150,7 @@ class ConferenceService(object):
 
     def remove_participant_conference_adhoc(self, conference_id, call_id):
         try:
-            self.ari.channels.delete(channelId=call['call_id'])
+            self.ari.channels.remove(channelId=call['call_id'])
         except ARINotFound:
             logger.info('Participant in conference adhoc does not exist')
 
