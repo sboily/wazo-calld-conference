@@ -147,8 +147,11 @@ class ConferenceService(object):
                 bridgeId=future_bridge_uuid,
             )
 
-        user_uuid = self.ari.channels.getChannelVar(channelId=channel_id, variable='CONF_ADHOC_OWNER').get('value')
-        bridge.setBridgeVar(variable='CONF_ADHOC_OWNER', value=user_uuid)
+        try:
+            user_uuid = self.ari.channels.getChannelVar(channelId=channel_id, variable='CONF_ADHOC_OWNER').get('value')
+            bridge.setBridgeVar(variable='CONF_ADHOC_OWNER', value=user_uuid)
+        except ARINotFound as e:
+            logger.debug(e)
         bridge.addChannel(channel=channel_id)
 
     def remove_participant_conference_adhoc(self, conference_id, call_id, user_uuid):
