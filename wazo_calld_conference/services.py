@@ -148,7 +148,7 @@ class ConferenceService(object):
 
     def remove_participant_conference_adhoc(self, conference_id, call_id):
         try:
-            self.ari.channels.remove(channelId=call['call_id'])
+            self.ari.channels.hangup(channelId=call['call_id'])
         except ARINotFound:
             logger.info('Participant in conference adhoc does not exist')
 
