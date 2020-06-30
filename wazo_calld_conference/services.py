@@ -117,7 +117,9 @@ class ConferenceService(object):
         return conference_id
 
     def delete_conference_adhoc(self, conference_id):
-        self.ari.bridges.delete(bridgeId=conference_id)
+        bridge = self.ari.bridges.get(bridgeId=conference_id)
+        if bridge:
+            bridge.destroy()
         return '', 204
 
     def join_bridge(self, channel_id, future_bridge_uuid):
