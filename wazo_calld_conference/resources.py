@@ -63,7 +63,7 @@ class ConferencesAdhocResource(AuthResource):
         form = conference_adhoc_schema.load(request.get_json())
         conference_adhoc = self._conferences_service.create_conference_adhoc(**form)
 
-        return conference_adhoc_schema.dump(conference_adhoc), 201
+        return conference_adhoc, 201
 
 
 class ConferenceAdhocResource(AuthResource):
