@@ -36,7 +36,14 @@ class ConferenceAdhocStasis:
 
     def _subscribe(self):
         self._ari.on_channel_event('StasisStart', self.stasis_start)
+        self.ari.on_channel_event('ChannelDestroyed', self.on_hangup)
+        self.ari.on_channel_event('StasisEnd', self.on_hangup)
 
     def initialize(self):
         self._subscribe()
         self._add_ari_application()
+
+    def on_hangup(self, channel, event):
+        logger.debug('ADHOC: on_hangup: %(id)s (%(name)s)', event['channel'])
+        logger.debug('ADHOC: ignoring StasisEnd event: channel %s, app %s', event['channel']['name'], event['application'])
+
