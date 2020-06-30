@@ -118,9 +118,10 @@ class ConferenceService(object):
 
     def delete_conference_adhoc(self, conference_id):
         bridge = self.ari.bridges.get(bridgeId=conference_id)
-        #channel_ids = set(bridge.json['channels'] for bridge in bridge.json['channels'] if self.id in bridge.json['channels'])
         
         if bridge:
+            for channel in bridge.json['channels']:
+                self.ari.channels.hangup(channelId=channel)
             bridge.destroy()
         return '', 204
 
