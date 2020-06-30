@@ -116,6 +116,10 @@ class ConferenceService(object):
 
         return conference_id
 
+    def delete_conference_adhoc(self, conference_id):
+        self.ari.bridges.delete(bridgeId=conference_id)
+        return '', 204
+
     def join_bridge(self, channel_id, future_bridge_uuid):
         logger.info('%s is joining bridge %s', channel_id, future_bridge_uuid)
 

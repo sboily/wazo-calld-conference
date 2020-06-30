@@ -80,6 +80,7 @@ class ConferenceAdhocResource(AuthResource):
 
     @required_acl('calld.conferences.adhoc.{conference_id}.delete')
     def delete(self, conference_id):
+        conference_adhoc = self._conferences_service.delete_conference_adhoc(conference_id)
         return '', 204
 
 
