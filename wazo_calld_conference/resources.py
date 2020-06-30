@@ -79,7 +79,7 @@ class ConferenceAdhocResource(AuthResource):
         form = conference_adhoc_schema.load(request.get_json())
         conference_adhoc = self._conferences_service.update_conference_adhoc(conference_id, **form)
 
-        return conference_adhoc_schema.dump(conference_adhoc), 204
+        return '', 204
 
     @required_acl('calld.users.me.conferences.adhoc.{conference_id}.delete')
     def delete(self, conference_id):

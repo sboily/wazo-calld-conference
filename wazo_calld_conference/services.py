@@ -111,12 +111,15 @@ class ConferenceService(object):
                                    channel.json['name'],
                                    context='conference_adhoc',
                                    exten=str(conference_id),
-                                   extra_channel=channel_initiator.json['name'])
+                                   extra_channel=channel_initiator.json['name'],
+                                   extra_context='conference_adhoc',
+                                   extra_exten='h',
+                                   extra_priority=1)
                 channel_initiator = None
             except WazoAmidError as e:
                 logger.exception('wazo-amid error: %s', e.__dict__)
 
-        return conference_id
+        return
 
     def delete_conference_adhoc(self, conference_id):
         bridge = self.ari.bridges.get(bridgeId=conference_id)

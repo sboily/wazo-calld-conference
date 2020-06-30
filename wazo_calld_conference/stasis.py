@@ -44,10 +44,13 @@ class ConferenceAdhocStasis:
         self._add_ari_application()
 
     def on_hangup(self, channel, event):
-        logger.debug('ADHOC: on_hangup: %s', event)
-        logger.debug('ADHOC: on_hangup: %(id)s (%(name)s)', event['channel'])
-        logger.debug('ADHOC: ignoring StasisEnd event: channel %s, app %s', event['channel']['name'], event['application'])
+        if event['application'] != self._app_name:
+            return
+
+        logger.debug('conference adhoc: participant channel_id: %s is left', channel_id)
+
         conference_id = event['bridge']['id']
         call_id = event['channel']['id']
         user_uuid = self._ari.bridges.getBridgeVar(bridgeId=conference_id, variable='CONF_ADHOC_OWNER').get('CONF_ADHOC_OWNER')
+
         self._notifier.participant_left(conference_id, call_id, user_uuid)
