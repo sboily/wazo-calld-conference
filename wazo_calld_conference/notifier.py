@@ -13,14 +13,14 @@ class ConferenceAdhocNotifier:
 
     def participant_left(self, conference_id, call_id, user_uuid):
         event = UserParticipantLeftConferenceAdhocEvent(conference_id, call_id)
-        headers = {'user_uuid': user_uuid}
+        headers = {'user_uuid:{uuid}'.format(uuid=user_uuid): True}
         self._bus_producer.publish(event, headers=headers)
 
 
 class UserParticipantLeftConferenceAdhocEvent:
 
     name = 'conference_adhoc_participant_left'
-    routing_key = 'conferences.adhoc.participant.left'
+    routing_key = 'conferences.adhoc.{conference_id}.participant.left'
     required_acl = 'events.conferences.users.me.conference_adhoc_participant_left'
 
     def __init__(self, conference_id, call_id):
@@ -28,6 +28,7 @@ class UserParticipantLeftConferenceAdhocEvent:
             'conference_id': conference_id,
             'call_id': call_id
         }
+        super(UserParticipantLeftConferenceAdhocEvent, self).__init__()
 
     def marshal(self):
         return self._body
