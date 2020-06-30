@@ -21,7 +21,7 @@ class UserParticipantLeftConferenceAdhocEvent:
 
     name = 'conference_adhoc_participant_left'
     routing_key = 'conferences.adhoc.participant.left'
-    required_acl = 'events.conference_adhoc_participant_left'
+    required_acl = 'events.conferences.users.me.conference_adhoc_participant_left'
 
     def __init__(self, conference_id, call_id):
         self._body = {
