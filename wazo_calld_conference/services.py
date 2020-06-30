@@ -73,7 +73,7 @@ class ConferenceService(object):
 
         return p
 
-    def create_conference_adhoc(self, calls, user_uuid):
+    def create_conference_adhoc(self, user_uuid, calls):
         conference_id = uuid.uuid4()
         conference_owner = None
         for call in calls:

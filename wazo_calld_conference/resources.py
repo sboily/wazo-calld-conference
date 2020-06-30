@@ -64,7 +64,7 @@ class ConferencesAdhocResource(AuthResource):
     def post(self):
         user_uuid = token.user_uuid
         form = conference_adhoc_schema.load(request.get_json())
-        conference_adhoc = self._conferences_service.create_conference_adhoc(**form, user_uuid)
+        conference_adhoc = self._conferences_service.create_conference_adhoc(user_uuid, **form)
 
         return conference_adhoc, 201
 
