@@ -147,7 +147,7 @@ class ConferenceService(object):
                 bridgeId=future_bridge_uuid,
             )
 
-        user_uuid = self.ari.channels.getChannelVar(variable='CONF_ADHOC_OWNER').get('value')
+        user_uuid = self.ari.channels.getChannelVar(channelId=channel_id, variable='CONF_ADHOC_OWNER').get('value')
         bridge.setBridgeVar(variable='CONF_ADHOC_OWNER', value=user_uuid)
         bridge.addChannel(channel=channel_id)
 
