@@ -65,7 +65,7 @@ paths:
         '503':
           $ref: '#/responses/AnotherServiceUnavailable'
   /conferences/adhoc/{conference_id}:
-    post:
+    put:
       summary: Update an adhoc conference
       description: '**Required ACL:** `calld.conferences.adhoc.{conference_id}.update`'
       parameters:

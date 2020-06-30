@@ -71,12 +71,12 @@ class ConferenceAdhocResource(AuthResource):
     def __init__(self, conferences_service):
         self._conferences_service = conferences_service
 
-    @required_acl('calld.conferences.adhoc.{conference_id}.create')
-    def post(self, conference_id):
+    @required_acl('calld.conferences.adhoc.{conference_id}.update')
+    def put(self, conference_id):
         form = conference_adhoc_schema.load(request.get_json())
         conference_adhoc = self._conferences_service.update_conference_adhoc(conference_id, **form)
 
-        return conference_adhoc_schema.dump(conference_adhoc), 201
+        return conference_adhoc_schema.dump(conference_adhoc), 204
 
     @required_acl('calld.conferences.adhoc.{conference_id}.delete')
     def delete(self, conference_id):
