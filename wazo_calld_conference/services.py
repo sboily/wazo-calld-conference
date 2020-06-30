@@ -63,7 +63,7 @@ class ConferenceService(object):
             except WazoAmidError as e:
                 logger.exception('wazo-amid error: %s', e.__dict__)
 
-        return conference_id
+        return {'conference_id': conference_id}
 
     def update_conference_adhoc(self, conference_id, calls):
         for call in calls:

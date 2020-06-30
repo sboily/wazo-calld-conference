@@ -40,6 +40,7 @@ class ConferenceParticipantsSchema(Schema):
 
 
 class ConferenceAdhocSchema(Schema):
+    conference_id = fields.String(missing=None)
     calls = fields.List(StrictDict(key_field=fields.String(required=True, validate=Length(min=1)),
                                    value_field=fields.String(required=True, validate=Length(min=1)),
                                    missing=dict))
