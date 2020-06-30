@@ -49,5 +49,6 @@ class ConferenceAdhocStasis:
         logger.debug('ADHOC: ignoring StasisEnd event: channel %s, app %s', event['channel']['name'], event['application'])
         conference_id = event['bridge']['id']
         call_id = event['channel']['id']
-        user_uuid = '1234'
+        user_uuid = self._ari_client.bridge.getBridgeVar(bridgeId=conference_id, variable='CONF_ADHOC_OWNER').get('value')
+        logger.debug('ADHOC: %s', user_uuid)
         self._notifier.participant_left(conference_id, call_id, user_uuid)
