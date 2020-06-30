@@ -4,12 +4,34 @@
 
 import uuid
 import logging
+import requests
 
 from wazo_calld.plugin_helpers import ami
 from wazo_calld.plugin_helpers.exceptions import WazoAmidError
 
 
 logger = logging.getLogger(__name__)
+
+
+def ami_redirect_extra(amid, channel, context, exten, priority=1, extra_channel=None, extra_context=None, extra_exten=None, extra_priority=None):
+    destination = {
+        'Channel': channel,
+        'Context': context,
+        'Exten': exten,
+        'Priority': priority,
+    }
+    if extra_channel:
+        destination['ExtraChannel'] = extra_channel
+    if extra_context:
+        destination['ExtraContext'] = extra_context
+    if extra_exten:
+        destination['ExtraExten'] = extra_exten
+        destination['ExtraPriority'] = extra_priority if extra_priority else 1
+    try:
+        amid.action('Redirect', destination)
+    except requests.RequestException as e:
+        raise WazoAmidError(amid, e)
+
 
 class ConferenceService(object):
 
@@ -50,16 +72,27 @@ class ConferenceService(object):
 
     def create_conference_adhoc(self, calls):
         conference_id = uuid.uuid4()
+        conference_owner = None
         for call in calls:
             try:
                 channel_initiator = self.ari.channels.get(channelId=call['initiator_call_id'])
                 channel = self.ari.channels.get(channelId=call['call_id'])
-                ami.redirect(self.amid,
-                             channel.json['name'],
-                             context='conference_adhoc',
-                             exten=str(conference_id),
-                             extra_channel=channel_initiator.json['name'])
-                channel_initiator = None
+                if not conference_owner:
+                    conference_owner = call['initiator_call_id']
+                    ami_redirect_extra(self.amid,
+                                       channel.json['name'],
+                                       context='conference_adhoc',
+                                       exten=str(conference_id),
+                                       extra_channel=channel_initiator.json['name'])
+                else:
+                    ami_redirect_extra(self.amid,
+                                       channel.json['name'],
+                                       context='conference_adhoc',
+                                       exten=str(conference_id),
+                                       extra_channel=channel_initiator.json['name'],
+                                       extra_context='conference_adhoc',
+                                       extra_exten='h',
+                                       extra_priority=1)
             except WazoAmidError as e:
                 logger.exception('wazo-amid error: %s', e.__dict__)
 
@@ -70,11 +103,11 @@ class ConferenceService(object):
             try:
                 channel_initiator = self.ari.channels.get(channelId=call['initiator_call_id'])
                 channel = self.ari.channels.get(channelId=call['call_id'])
-                ami.redirect(self.amid,
-                             channel.json['name'],
-                             context='conference_adhoc',
-                             exten=str(conference_id),
-                             extra_channel=channel_initiator.json['name'])
+                ami_redirect_extra(self.amid,
+                                   channel.json['name'],
+                                   context='conference_adhoc',
+                                   exten=str(conference_id),
+                                   extra_channel=channel_initiator.json['name'])
                 channel_initiator = None
             except WazoAmidError as e:
                 logger.exception('wazo-amid error: %s', e.__dict__)
