@@ -13,8 +13,7 @@ class ConferenceAdhocNotifier:
 
     def participant_left(self, conference_id, call_id, user_uuid):
         event = UserParticipantLeftConferenceAdhocEvent(conference_id, call_id)
-        logger.debug('ADHOC: %s', user_uuid)
-        headers = {'user_uuid:{}'.format(user_uuid): True}
+        headers = {'user_uuid': user_uuid}
         self._bus_producer.publish(event, headers=headers)
 
 
