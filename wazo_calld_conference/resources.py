@@ -62,8 +62,9 @@ class ConferencesAdhocResource(AuthResource):
 
     @required_acl('calld.users.me.conferences.adhoc.create')
     def post(self):
+        user_uuid = token.user_uuid
         form = conference_adhoc_schema.load(request.get_json())
-        conference_adhoc = self._conferences_service.create_conference_adhoc(**form)
+        conference_adhoc = self._conferences_service.create_conference_adhoc(**form, user_uuid)
 
         return conference_adhoc, 201
 
