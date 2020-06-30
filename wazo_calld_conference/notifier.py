@@ -24,12 +24,13 @@ class UserParticipantLeftConferenceAdhocEvent:
     required_acl = 'events.conferences.users.{user_uuid}.conference_adhoc_participant_left'
 
     def __init__(self, conference_id, call_id, user_uuid):
-        self.required_acl = self.required_acl.format(user_uuid)
         self._body = {
             'conference_id': conference_id,
             'call_id': call_id
         }
         super(UserParticipantLeftConferenceAdhocEvent, self).__init__()
+        if user_uuid:
+            self.required_acl = self.required_acl.format(user_uuid=user_uuid)
 
     def marshal(self):
         return self._body
