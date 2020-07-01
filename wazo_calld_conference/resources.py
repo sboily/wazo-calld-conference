@@ -68,6 +68,10 @@ class ConferencesAdhocResource(AuthResource):
 
         return conference_adhoc, 201
 
+    @required_acl('calld.users.me.conferences.adhoc')
+    def head(self):
+        return '', 200
+
 
 class ConferenceAdhocResource(AuthResource):
 
