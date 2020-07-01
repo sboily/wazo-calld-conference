@@ -65,13 +65,13 @@ class ConferenceService(object):
 
     def get_participants(self, conference_id):
         members = self.amid.action('confbridgelist', {'conference': conference_id})
-        p = []
+        participants = []
 
         for member in members:
             if member.get('Conference') == conference_id:
-                p.append(self._participant(member))
+                participants.append(self._participant(member))
 
-        return p
+        return participants
 
     def create_conference_adhoc(self, user_uuid, calls):
         conference_id = uuid.uuid4()
@@ -122,13 +122,17 @@ class ConferenceService(object):
         return
 
     def delete_conference_adhoc(self, conference_id):
-        bridge = self.ari.bridges.get(bridgeId=conference_id)
+        bridge = None
+        try:
+            bridge = self.ari.bridges.get(bridgeId=conference_id)
+        except ARINotFound:
+            pass
         
         if bridge:
             for channel in bridge.json['channels']:
                 self.ari.channels.hangup(channelId=channel)
             bridge.destroy()
-        return '', 204
+        return
 
     def join_bridge(self, channel_id, future_bridge_uuid):
         logger.info('%s is joining bridge %s', channel_id, future_bridge_uuid)
