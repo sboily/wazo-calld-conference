@@ -4,6 +4,11 @@
 
 from xivo.pubsub import CallbackCollector
 from wazo_amid_client import Client as AmidClient
+from wazo_confd_client import Client as ConfdClient
+
+from wazo_calld.plugins.calls.notifier import CallNotifier
+from wazo_calld.plugins.calls.services import CallsService
+from wazo_calld.plugins.calls.dial_echo import DialEchoManager
 
 from .resources import (
     ConferencesResource,
@@ -35,9 +40,18 @@ class Plugin(object):
 
         notifier = ConferenceAdhocNotifier(bus_publisher)
 
+        confd_client = ConfdClient(**config['confd'])
+
+        token_changed_subscribe(confd_client.set_token)
+
+        dial_echo_manager = DialEchoManager()
+
+        calls_notifier = CallNotifier(bus_publisher)
+        calls_service = CallsService(amid_client, config['ari']['connection'], ari.client, confd_client, dial_echo_manager, calls_notifier)
+
         conferences_service = ConferenceService(amid_client, ari.client, notifier)
 
-        conferences_bus_event_handler = ConferencesBusEventHandler(ari.client, bus_publisher)
+        conferences_bus_event_handler = ConferencesBusEventHandler(ari.client, bus_publisher, calls_service, calls_notifier)
         conferences_bus_event_handler.subscribe(bus_consumer)
 
         stasis = ConferenceAdhocStasis(ari, conferences_service, notifier)
