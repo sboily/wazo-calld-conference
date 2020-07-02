@@ -37,7 +37,7 @@ class Plugin(object):
 
         conferences_service = ConferenceService(amid_client, ari.client, notifier)
 
-        conferences_bus_event_handler = ConferencesBusEventHandler(bus_publisher)
+        conferences_bus_event_handler = ConferencesBusEventHandler(ari.client, bus_publisher)
         conferences_bus_event_handler.subscribe(bus_consumer)
 
         stasis = ConferenceAdhocStasis(ari, conferences_service, notifier)
