@@ -92,8 +92,7 @@ class ConferenceParticipantAdhocResource(AuthResource):
 
     @required_acl('calld.users.me.conferences.adhoc.{conference_id}.participants.{call_id}.update')
     def put(self, conference_id, call_id):
-        user_uuid = token.user_uuid
-        self._conferences_service.add_new_participant(conference_id, call_id, user_uuid)
+        self._conferences_service.add_new_participant(conference_id, call_id)
         return '', 204
 
     @required_acl('calld.users.me.conferences.adhoc.{conference_id}.participants.{call_id}.delete')
