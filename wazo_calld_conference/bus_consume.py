@@ -13,9 +13,11 @@ logger = logging.getLogger(__name__)
 
 class ConferencesBusEventHandler(object):
 
-    def __init__(self, ari, bus_publisher):
+    def __init__(self, ari, bus_publisher, calls_service, calls_notifier):
         self.ari = ari
         self.bus_publisher = bus_publisher
+        self.services = calls_service
+        self.notifier = calls_notifier
 
     def subscribe(self, bus_consumer):
         bus_consumer.on_ami_event('ConfbridgeStart', self._confbridge_start)
