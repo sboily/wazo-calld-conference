@@ -9,6 +9,7 @@ import requests
 from ari.exceptions import ARINotFound
 
 from wazo_calld.plugin_helpers import ami
+from wazo_calld.plugin_helpers import ari_
 from wazo_calld.plugin_helpers.exceptions import WazoAmidError
 
 
@@ -73,9 +74,11 @@ class ConferenceService(object):
 
         return participants
 
-    def create_conference_adhoc(self, user_uuid, calls):
+    def create_conference_adhoc(self, user_uuid, host_call_id, participant_call_ids):
         conference_id = uuid.uuid4()
         conference_owner = None
+        calls = self._find_call_pairs(host_call_id, participant_call_ids)
+        logger.critical(calls)
         for call in calls:
             try:
                 channel_initiator = self.ari.channels.get(channelId=call['initiator_call_id'])
@@ -102,6 +105,10 @@ class ConferenceService(object):
 
         return {'conference_id': str(conference_id)}
 
+    def add_new_participant(self, conference_id, participant_call_id):
+        calls = self._find_call_pairs(None, [participant_call_id])
+        self.update_conference_adhoc(conference_id, calls)
+
     def update_conference_adhoc(self, conference_id, calls):
         for call in calls:
             try:
@@ -127,7 +134,7 @@ class ConferenceService(object):
             bridge = self.ari.bridges.get(bridgeId=conference_id)
         except ARINotFound:
             pass
-        
+
         if bridge:
             for channel in bridge.json['channels']:
                 self.ari.channels.hangup(channelId=channel)
@@ -196,3 +203,10 @@ class ConferenceService(object):
                 'language': member.get('Language'),
                 'linkedid': member.get('LinkedID'),
                 'channel': member.get('Channel')}
+
+    def _find_call_pairs(self, host_call_id, participant_call_ids):
+        call_pairs = []
+        for participant_call_id in participant_call_ids:
+            initiator_call_id = ari_.Channel(participant_call_id, self.ari).only_connected_channel().id
+            call_pairs.append({'initiator_call_id': initiator_call_id, 'call_id': participant_call_id})
+        return call_pairs

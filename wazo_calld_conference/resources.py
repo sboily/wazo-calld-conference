@@ -41,6 +41,7 @@ class ConferenceResource(AuthResource):
 
         return conference_schema.dump(conference)
 
+
 class ConferenceResourceVerify(ErrorCatchingResource):
 
     def __init__(self, conferences_service):
@@ -78,13 +79,6 @@ class ConferenceAdhocResource(AuthResource):
     def __init__(self, conferences_service):
         self._conferences_service = conferences_service
 
-    @required_acl('calld.users.me.conferences.adhoc.{conference_id}.update')
-    def put(self, conference_id):
-        form = conference_adhoc_schema.load(request.get_json())
-        conference_adhoc = self._conferences_service.update_conference_adhoc(conference_id, **form)
-
-        return '', 204
-
     @required_acl('calld.users.me.conferences.adhoc.{conference_id}.delete')
     def delete(self, conference_id):
         conference_adhoc = self._conferences_service.delete_conference_adhoc(conference_id)
@@ -96,7 +90,13 @@ class ConferenceParticipantAdhocResource(AuthResource):
     def __init__(self, conferences_service):
         self._conferences_service = conferences_service
 
-    @required_acl('calld.users.me.conferences.adhoc.{conference_id}.{call_id}.delete')
+    @required_acl('calld.users.me.conferences.adhoc.{conference_id}.participants.{call_id}.update')
+    def put(self, conference_id, call_id):
+        user_uuid = token.user_uuid
+        self._conferences_service.add_new_participant(conference_id, call_id, user_uuid)
+        return '', 204
+
+    @required_acl('calld.users.me.conferences.adhoc.{conference_id}.participants.{call_id}.delete')
     def delete(self, conference_id, call_id):
         user_uuid = token.user_uuid
         self._conferences_service.remove_participant_conference_adhoc(conference_id, call_id, user_uuid)

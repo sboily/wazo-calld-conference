@@ -47,14 +47,14 @@ paths:
   /users/me/conferences/adhoc:
     post:
       summary: Create an adhoc conference
-      description: '**Required ACL:** `calld.conferences.adhoc.create`'
+      description: '**Required ACL:** `calld.users.me.conferences.adhoc.create`'
       parameters:
       - name: body
         in: body
         description: Parameters of the conference calls
         required: true
         schema:
-          $ref: '#/definitions/ConferenceAdhoc'
+          $ref: '#/definitions/ConferenceAdhocCreation'
       tags:
       - conferences
       responses:
@@ -65,29 +65,9 @@ paths:
         '503':
           $ref: '#/responses/AnotherServiceUnavailable'
   /users/me/conferences/adhoc/{conference_id}:
-    put:
-      summary: Update an adhoc conference
-      description: '**Required ACL:** `calld.conferences.adhoc.{conference_id}.update`'
-      parameters:
-      - $ref: '#/parameters/ConferenceID'
-      - name: body
-        in: body
-        description: Parameters of the conference calls
-        required: true
-        schema:
-          $ref: '#/definitions/ConferenceAdhoc'
-      tags:
-      - conferences
-      responses:
-        '201':
-          description: Conference adhoc has been created
-          schema:
-            $ref: '#/definitions/ConferenceAdhoc'
-        '503':
-          $ref: '#/responses/AnotherServiceUnavailable'
     delete:
       summary: Delete an adhoc conference
-      description: '**Required ACL:** `calld.conferences.adhoc.{conference_id}.delete`'
+      description: '**Required ACL:** `calld.users.me.conferences.adhoc.{conference_id}.delete`'
       parameters:
         - $ref: '#/parameters/ConferenceID'
       tags:
@@ -97,10 +77,23 @@ paths:
           description: Conference adhoc has been deleted
         '503':
           $ref: '#/responses/AnotherServiceUnavailable'
-  /users/me/conferences/adhoc/{conference_id}/calls/{call_id}:
+  /users/me/conferences/adhoc/{conference_id}/participants/{call_id}:
+    put:
+      summary: Add a participant into an adhoc conference
+      description: '**Required ACL:** `calld.users.me.conferences.adhoc.{conference_id}.participants.{call_id}.update`'
+      parameters:
+        - $ref: '#/parameters/ConferenceID'
+        - $ref: '#/parameters/CallID'
+      tags:
+      - conferences
+      responses:
+        '204':
+          description: Participants in conference adhoc has been added
+        '503':
+          $ref: '#/responses/AnotherServiceUnavailable'
     delete:
       summary: Remove a participant of an adhoc conference
-      description: '**Required ACL:** `calld.conferences.adhoc.{conference_id}.{call_id}.delete`'
+      description: '**Required ACL:** `calld.users.me.conferences.adhoc.{conference_id}.participants.{call_id}.delete`'
       parameters:
         - $ref: '#/parameters/ConferenceID'
         - $ref: '#/parameters/CallID'
@@ -135,20 +128,17 @@ definitions:
     properties:
       items:
         $ref: '#/definitions/Conference'
-  ConferenceAdhoc:
+  ConferenceAdhocCreation:
     type: object
     properties:
-      calls:
-        description: List of calls in this conference
+      host_call_id:
+        description: The call_id of the host call
+        type: string
+      participant_call_ids:
+        description: The call_id of the participating calls in this conference, excluding the host.
         type: array
         items:
-          properties:
-            initiator_call_id:
-              description: Call ID of the initiator of the conference
-              type: string
-            call_id:
-              description: Call ID from channel participant
-              type: string
+          type: string
 parameters:
   ConferenceID:
     name: conference_id

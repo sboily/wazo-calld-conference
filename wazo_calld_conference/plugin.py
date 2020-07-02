@@ -65,4 +65,4 @@ class Plugin(object):
         api.add_resource(ConferenceResourceVerify, '/conferences/verify/<conference_id>', resource_class_args=[conferences_service])
         api.add_resource(ConferencesAdhocResource, '/users/me/conferences/adhoc', resource_class_args=[conferences_service])
         api.add_resource(ConferenceAdhocResource, '/users/me/conferences/adhoc/<conference_id>', resource_class_args=[conferences_service])
-        api.add_resource(ConferenceParticipantAdhocResource, '/users/me/conferences/adhoc/<conference_id>/calls/<call_id>', resource_class_args=[conferences_service])
+        api.add_resource(ConferenceParticipantAdhocResource, '/users/me/conferences/adhoc/<conference_id>/participants/<call_id>', resource_class_args=[conferences_service])
