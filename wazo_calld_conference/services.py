@@ -166,7 +166,7 @@ class ConferenceService(object):
             bridge.setBridgeVar(variable='CONF_ADHOC_OWNER', value=user_uuid)
         except ARINotFound as e:
             logger.debug(e)
-        bridge.addChannel(channel=channel_id)
+        bridge.addChannel(channel=channel_id, inhibitConnectedLineUpdates=True)
 
     def remove_participant_conference_adhoc(self, conference_id, call_id, user_uuid):
         try:
