@@ -1,8 +1,9 @@
 name: wazo-calld-conference
 namespace: sboily
-version: 0.1.0
+version: 0.1.1
 author: Sylvain Boily
 display_name: Calld extend API Conference
+min_wazo_version: 20.11
 tags:
   - beta
   - conference
